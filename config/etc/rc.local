@@ -1,0 +1,115 @@
+#!/bin/bash -e
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+#
+# https://github.com/keystone-sideral/netgear_rn104/
+#
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+
+#####################################################
+#                  Mac address                      #
+#                                                   #
+#####################################################
+
+# uboot doesn't pass on the MAC address to the kernel and has to be set in userland.
+/usr/bin/macchanger -m 28:c6:8e:35:8b:b8 eth0
+/usr/bin/macchanger -m 28:c6:8e:35:8b:b9 eth1
+
+#####################################################
+#                LED power management               #
+#                                                   #
+#####################################################
+
+# The power LED should be set to ON after the kernel booted.
+echo 1 > /sys/class/leds/rn104\:blue\:pwr/brightness
+
+# Make Sata LEDs indicate disk activity
+iostat -z -d 1 sda | sed -u -e '1d' -e 's/Device.*/none/' -e 's/sd.*/heartbeat/' -e '/^$/d' > /sys/class/leds/rn104\:blue\:sata4/trigger &
+iostat -z -d 1 sdb | sed -u -e '1d' -e 's/Device.*/none/' -e 's/sd.*/heartbeat/' -e '/^$/d' > /sys/class/leds/rn104\:blue\:sata3/trigger &
+iostat -z -d 1 sdc | sed -u -e '1d' -e 's/Device.*/none/' -e 's/sd.*/heartbeat/' -e '/^$/d' > /sys/class/leds/rn104\:blue\:sata2/trigger &
+iostat -z -d 1 sdd | sed -u -e '1d' -e 's/Device.*/none/' -e 's/sd.*/heartbeat/' -e '/^$/d' > /sys/class/leds/rn104\:blue\:sata1/trigger &
+
+#####################################################
+#               Fan power management                #
+#                                                   #
+#####################################################
+
+# control fan insted of fancontrol (too lound for me)
+
+# pwm1_mode: set driving mode: 1 for PWM mode, 0 for DC mode.
+echo 1 > /sys/bus/i2c/drivers/g762/0-003e/hwmon/hwmon1/pwm1_mode
+
+# pwm1_enable: set current fan speed control mode i.e. 1 for manual fan
+#           speed control (open-loop) via pwm1 described below, 2 for
+#           automatic fan speed control (closed-loop) via fan1_target
+#           above.
+echo 1 > /sys/bus/i2c/drivers/g762/0-003e/hwmon/hwmon1/pwm1_enable
+
+# pwm1: get or set PWM fan control value in open-loop mode. This is an
+#            integer value between 0 and 255. 0 stops the fan, 255 makes
+#            it run at full speed.
+echo 40 > /sys/bus/i2c/drivers/g762/0-003e/hwmon/hwmon1/pwm1
+
+#####################################################
+#          Hard drive power management              #
+#                                                   #
+#####################################################
+
+# Set standby to 240 (20 minutes) for /dev/sd{b,c,d}
+hdparm -S 240 /dev/sdb
+hdparm -S 240 /dev/sdc
+hdparm -S 240 /dev/sdd
+
+# Set value to Advanced Power Management (127 permit spin-down) (sdb do not support it)
+hdparm -B 127 /dev/sdc
+hdparm -B 127 /dev/sdd
+
+# Set the Automatic Acoustic Management feature. Most modern hard disk drives have the ability to speed down the head movements to reduce their noise output.
+# The possible value depends on the disk, some disks may not support this feature.
+hdparm -M 128 /dev/sdb
+
+#################################################
+#            Speed up mdadm                     #
+#################################################
+
+# Set 10MB/S minimum
+echo 100000 > /proc/sys/dev/raid/speed_limit_min
+
+# Set 100MB/S maximum
+echo 1000000 > /proc/sys/dev/raid/speed_limit_max
+
+####################################################
+#            Make filesystem discoverable          #
+#                    by Windows 10                 #
+#     (https://github.com/christgau/wsdd)          #
+####################################################
+
+/usr/bin/wsdd --shortlog --interface eth1 --ipv4only &
+
+
+#####################################################
+#                Front LCD Display                  #
+#                                                   #
+#####################################################
+# launch script for display
+/usr/local/bin/display.sh &
+
+exit 0
