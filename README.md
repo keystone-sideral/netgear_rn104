@@ -1,4 +1,4 @@
-# Custom kernel for Netgear ReadyNas 104 (rn104) Nas on Debian 12
+# Custom kernel for Netgear ReadyNas 104 (rn104) on Debian 12
 
 &#9888; __DO WITH YOUR OWN RISK! I'M NOT RESPONSIBLE FOR WHAT HAPPENS TO YOUR DEVICE __ &#9888;  
 
