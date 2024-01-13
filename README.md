@@ -12,7 +12,7 @@ Works :
 * Front LED ( use iostat)  
 * Everything :)  
 
-![Screenshot](Screenshots/Screenshot from 2024-01-13 12-30-48.png) 
+![Screenshot](Screenshots/Screenshot2024.png) 
 
 ## How to install Debian GNU/Linux 11?
 First, you need to install vanilla version of Debian:  
