@@ -1,4 +1,4 @@
-# Custom kernel for Netgear rn104 Nas on Debian 11
+# Custom kernel for Netgear rn104 Nas on Debian 12
 
 &#9888; __DO WITH YOUR OWN RISK! I'M NOT RESPONSIBLE FOR WHAT HAPPENS TO YOUR DEVICE __ &#9888;  
 
@@ -14,7 +14,7 @@ Works :
 
 ![Screenshot](Screenshots/Screenshot2024.png) 
 
-## How to install Debian GNU/Linux 11?
+## How to install Debian GNU/Linux 12?
 First, you need to install vanilla version of Debian:  
 
 * This guy wrote a tutorial for installing release 10 of Debian on our device. Simply replace any instance for "buster" to last release of Debian.
