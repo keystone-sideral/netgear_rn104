@@ -12,12 +12,12 @@ Works :
 * Front LED ( use iostat)  
 * Everything :)  
 
-![Screenshot](Screenshots/Screenshot-6.2.9.png)
+![Screenshot](Screenshots/Screenshot from 2024-01-13 12-30-48.png) 
 
 ## How to install Debian GNU/Linux 11?
 First, you need to install vanilla version of Debian:  
 
-* This guy wrote a tutorial for installing release 10 of Debian on our device. Simply replace any instance for "buster" to "bullseyes"
+* This guy wrote a tutorial for installing release 10 of Debian on our device. Simply replace any instance for "buster" to last release of Debian.
 https://www.katerkamp.de/howto/osinstall/rn104-d-i.xhtml  
 
 
